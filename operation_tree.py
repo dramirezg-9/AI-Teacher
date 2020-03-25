@@ -1,11 +1,21 @@
 import parsing
 
 
+class o_tree:
+
+    def __init__(self, tree: list):
+        self.key = tree[0][0][0]
+        self.branches = []
+        if 1 < len(tree):
+            for i in range(len(tree[1])):
+                self.branches.append(o_tree(sub_tree(tree, 1, i)))
+
+
 def make_tree(expression: str) -> list:
     raw = parsing.parsing(expression)
     processed = _level_processing(raw)
     tree1 = _levels_to_tree(processed)
-    asociative = _asociative_levels(tree1,"")
+    asociative = _asociative_levels(tree1, "")
     return _levels_to_tree(asociative)
 
 
@@ -22,19 +32,17 @@ def _asociative_levels(tree: list, operation: str) -> list:
         elif x[1] < x[2]:
             temp.append(_asociative_levels(sub_tree(tree, 1, i), ""))
         else:
-            temp.append([[(x[0],0)]])
+            temp.append([[(x[0], 0)]])
     pre2 = _list_list_sum(temp)
     if insert:
-        pre2.insert(0,None)
+        pre2.insert(0, None)
         pre1.append([(operation, len(pre2[1]))])
     return _list_list_sum([pre1, pre2])
 
 
 def simplify_tree(tree: list) -> list:
-    return [[(x[0], x[2]-x[1]) for x in y] for y in tree]
+    return [[(x[0], x[2] - x[1]) for x in y] for y in tree]
 
-def double_simplify_tree(tree: list) -> list:
-    return [[x[0] for x in y] for y in tree]
 
 def sub_tree(tree: list, x: int, y: int) -> list:
     n1 = tree[x][y][1]
@@ -42,8 +50,8 @@ def sub_tree(tree: list, x: int, y: int) -> list:
     start = [[tree[x][y]]]
     temp = []
     if n1 < n2:
-        for z in range(n1,n2):
-            temp.append(sub_tree(tree,x+1,z))
+        for z in range(n1, n2):
+            temp.append(sub_tree(tree, x + 1, z))
     end = _list_list_sum(temp)
     end.insert(0, None)
     levels = simplify_tree(_list_list_sum([start, end]))
@@ -101,7 +109,7 @@ def _list_list_sum(lists: list) -> list:
         return []
     maxl = max(lists, key=lambda x: len(x))
     mini = min(lists, key=lambda x: len(x))
-    respuesta = [_func1([ x[i] for x in lists]) for i in range(len(mini))]
+    respuesta = [_func1([x[i] for x in lists]) for i in range(len(mini))]
     respuesta += maxl[len(mini):]
     return respuesta
 
@@ -139,4 +147,4 @@ function_parameters = {
     "^": 2
 }
 
-asociative_operations = ["+","*"]
+asociative_operations = ["+", "*"]
