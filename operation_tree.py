@@ -10,6 +10,33 @@ class o_tree:
             for i in range(len(tree[1])):
                 self.branches.append(o_tree(sub_tree(tree, 1, i)))
 
+    def is_equal(self, tree) -> bool:
+        if self.key == tree.key:
+            if self.key == '+' or self.key == '*':
+                if len(self.branches) != len(tree.branches):
+                    return False
+                temp = tree.branches.copy()
+                for x in self.branches:
+                    found = False
+                    for i,y in enumerate(temp):
+                        if x.is_equal(y):
+                            found = True
+                            del temp[i]
+                            break
+                    if not found:
+                        return False
+            else:
+                for x,y in zip(self.branches, tree.branches):
+                    if not x.is_equal(y):
+                        return False
+            return True
+        return False
+
+    def get_all_trees(self)-> list:
+        ans = [self]
+        for x in self.branches:
+            ans += x.get_all_trees()
+        return ans
 
 def make_tree(expression: str) -> list:
     raw = parsing.parsing(expression)
@@ -26,18 +53,20 @@ def _asociative_levels(tree: list, operation: str) -> list:
         operation = tree[0][0][0]
         insert = True
     temp = []
-    for i, x in enumerate(tree[1]):
-        if x[0] == operation and operation in asociative_operations:
-            temp.append(_asociative_levels(sub_tree(tree, 1, i), operation))
-        elif x[1] < x[2]:
-            temp.append(_asociative_levels(sub_tree(tree, 1, i), ""))
-        else:
-            temp.append([[(x[0], 0)]])
-    pre2 = _list_list_sum(temp)
-    if insert:
-        pre2.insert(0, None)
-        pre1.append([(operation, len(pre2[1]))])
-    return _list_list_sum([pre1, pre2])
+    if len(tree) > 1:
+        for i, x in enumerate(tree[1]):
+            if x[0] == operation and operation in asociative_operations:
+                temp.append(_asociative_levels(sub_tree(tree, 1, i), operation))
+            elif x[1] < x[2]:
+                temp.append(_asociative_levels(sub_tree(tree, 1, i), ""))
+            else:
+                temp.append([[(x[0], 0)]])
+        pre2 = _list_list_sum(temp)
+        if insert:
+            pre2.insert(0, None)
+            pre1.append([(operation, len(pre2[1]))])
+        return _list_list_sum([pre1, pre2])
+    return [[(operation,0,0)]]
 
 
 def simplify_tree(tree: list) -> list:
@@ -144,7 +173,8 @@ function_parameters = {
     "+": 2,
     "*": 2,
     "/": 2,
-    "^": 2
+    "^": 2,
+    "value": 1
 }
 
 asociative_operations = ["+", "*"]

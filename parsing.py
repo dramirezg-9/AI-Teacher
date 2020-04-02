@@ -78,7 +78,7 @@ def parsing(expression: str) -> list:
                     if check["tentative"]:
                         tentative = temp
                         tentative_index = j
-                    if check["count"] == 0:
+                    if check["count"] == 0 or j == length-1:
                         if tentative:
                             if expression[tentative_index + 1] == "^":
                                 count = 0
@@ -186,4 +186,4 @@ def _op_compare(x: str, y: str) -> bool:
 
 function_index = ["sin", "sen", "csc", "sinh", "senh", "arcsen", "arcsin",
                   "cos", "sec", "cosh", "arccos", "tan", "tanh", "arctan",
-                  "cot", "log", "ln"]
+                  "cot", "log", "ln", "value"]
