@@ -2,7 +2,13 @@ import parsing
 
 
 class o_tree:
+    """
+    Representa una expresión algebraica.
 
+    Atributos:
+    key(str): La operación, función, variable o número que representa el árbol.
+    branches(list): Lista de referencias a los árboles hijos.
+    """
     def __init__(self, tree: list):
         self.key = tree[0][0][0]
         self.branches = []
@@ -11,32 +17,66 @@ class o_tree:
                 self.branches.append(o_tree(sub_tree(tree, 1, i)))
 
     def is_equal(self, tree) -> bool:
+        """
+        Determines whether the tree is equal or not to another tree.
+        :param tree: Tree to be compared to.
+        :return: True if the trees are equal, False otherwise.
+        """
         if self.key == tree.key:
+            # the order is not important
             if self.key == '+' or self.key == '*':
                 if len(self.branches) != len(tree.branches):
                     return False
                 temp = tree.branches.copy()
                 for x in self.branches:
                     found = False
-                    for i,y in enumerate(temp):
+                    for i, y in enumerate(temp):
                         if x.is_equal(y):
                             found = True
                             del temp[i]
                             break
                     if not found:
                         return False
+            # the order is important
             else:
-                for x,y in zip(self.branches, tree.branches):
+                for x, y in zip(self.branches, tree.branches):
                     if not x.is_equal(y):
                         return False
             return True
         return False
 
-    def get_all_trees(self)-> list:
+    def get_all_trees(self) -> list:
+        """
+        :return: A list that contains the trees contained in the tree (including itself).
+        """
         ans = [self]
         for x in self.branches:
             ans += x.get_all_trees()
         return ans
+
+    def str_tree(self) -> str:
+        """
+        :return: A str that represents the tree in Polish Notation (not Reversed).
+        """
+        res = self.key
+        for x in self.branches:
+            res += x.str_tree()
+        return res
+
+    def reference_str_tree(self) -> str:
+        """
+        :return: A str that represents a tree that can be retrieved from a references dictionary (abstract trees).
+        """
+        res = "v"
+        if not ((self.key.isalpha() and len(self.key) == 1 and self.key != "e") or self.key.isnumeric()):
+            res = self.key
+            for x in self.branches:
+                res += x.reference_str_tree()
+        return res
+
+# De aquí en adelante no es realmente necesario que entiendan el código, considerando que maneja los árboles de una
+# manera más primitiva. Sin embargo, continua siendo código importante para la creación de árboles de operaciones
+# como tal.
 
 def make_tree(expression: str) -> list:
     raw = parsing.parsing(expression)
@@ -66,7 +106,7 @@ def _asociative_levels(tree: list, operation: str) -> list:
             pre2.insert(0, None)
             pre1.append([(operation, len(pre2[1]))])
         return _list_list_sum([pre1, pre2])
-    return [[(operation,0,0)]]
+    return [[(operation, 0, 0)]]
 
 
 def simplify_tree(tree: list) -> list:
