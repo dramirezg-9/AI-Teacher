@@ -1,0 +1,39 @@
+def libre1(expresion:str)-> list:
+    from parsing import parsing
+    
+    libres = []
+    primaria = parsing(expresion)[-1]
+    operaciones = [["+","-"],["*","/"]]
+    
+    
+    
+    central = operaciones[0]
+    operador = primaria
+    if primaria in operaciones[1]:
+        operador = "*"
+        central = operaciones[1]
+    
+    i = 0
+    print(central)
+    
+    while i<len(expresion):
+        pase = False
+        primero = ""
+        
+        while i<len(expresion) and ((expresion[i] not in central) or pase):
+            print(primero,pase)
+            print((expresion[i] not in central))
+            if expresion[i] == "(":
+                pase = True
+            elif expresion[i] == ")":
+                pase = False
+            primero += expresion[i]
+            i+=1
+            
+  
+        libres.append((operador,primero))
+        if i<len(expresion):
+            operador = expresion[i]
+        i +=1
+        
+    return libres 
