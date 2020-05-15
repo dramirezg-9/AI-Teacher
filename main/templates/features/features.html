@@ -1,59 +1,74 @@
 {% extends 'base/base.html' %}
-
 {% block meta %}
 {% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'main/features.css' %}">
 {% endblock %}
-
 {% block title %} Caracteristicas {% endblock %}
 
 {% block content %}
 
-<section class="companies py-5">
-    <div class="container py-md-5 py-3">
-        <div class="heading">
-            <h3 class="head text-center">Librerías y herramientas utilizadas</h3>
-        </div>
-        <div class="grid mt-5">
-            <div class="marquee">
-                <div class="marquee--inner">
-                    <span>
-                        <div class="orb black">
-                            <div class="iconslash"><img src="{% static 'main/aa.png' %}" /></div>
-                            <p class="">Django es el framework para el diseño web</p>
-                        </div>
-                        <div class="orb red">
 
-                            <p class="">Es el framework utilizado para el dise;o web.</p>
+<div class="container-fluid p-5 bg-secondary vh-100">
+    <div class="d-flex justify-content-center m-5 p-5">
+        <h1>Librerias y herramientas usadas.</h1>
+    </div>
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+        </ol>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <div class="d-flex justify-content-center p-5">
+                    <div class="card" style="width: 20rem;">
+                        <div class="container p-4" style="width: 200px; height: 200px;">
+                            <img src="{% static 'main/django_icon.svg' %}" class="card-img-top">
                         </div>
-                        <div class="orb green">
-
-                            <p class="">Es la libreria que se utilizo para poder emplear los modelos de Machine Learning
-                                en una pagina web</p>
+                        <div class="card-body">
+                            <h5 class="card-title">Django</h5>
+                            <p class="card-text">Django es un framework web orientado en python.</p>
+                            <a href="https://www.djangoproject.com/" class="btn btn-primary">Go Django</a>
                         </div>
-                        <div class="orb blue">
-
-                            <p class="">Muchas imagenes fueron sacadas y acreditadas a esta pagina.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="d-flex justify-content-center p-5">
+                    <div class="card" style="width: 20rem;">
+                        <div class="container p-4" style="width: 200px; height: 200px;">
+                            <img src="{% static 'main/django_icon.svg' %}" class="card-img-top">
                         </div>
-                    </span>
-                    <span>
-                        <div class="orb pink">
-
-                            <p class="">Es la libreria, agria</p>
+                        <div class="card-body">
+                            <h5 class="card-title">Django</h5>
+                            <p class="card-text">Django es un framework web orientado en python.</p>
+                            <a href="https://www.djangoproject.com/" class="btn btn-primary">Go Django</a>
                         </div>
-                        <div class="orb orange">
-
-                            <p class="">Faucibus orci luctus etl ultrices posuere ipsum cubilia curae ultrices mollis
-                                nunc</p>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="d-flex justify-content-center p-5">
+                    <div class="card" style="width: 20rem;">
+                        <div class="container p-4" style="width: 200px; height: 200px;">
+                            <img src="{% static 'main/bootstrap_icon.svg' %}" class="card-img-top">
                         </div>
-                        <div class="orb black">
-                            <div class="iconslash"><img src="{% static 'main/aa.png' %}" /></div>
-                            <p class="">Django es el framework para el diseño web</p>
+                        <div class="card-body">
+                            <h5 class="card-title">Bootstrap</h5>
+                            <p class="card-text">Bootstrap es una biblioteca de diseño basado en css.</p>
+                            <a href="https://getbootstrap.com/" class="btn btn-primary">Go Bootstrap</a>
                         </div>
-                    </span>
+                    </div>
                 </div>
             </div>
         </div>
+        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
     </div>
-</section>
+</div>
 {% endblock %}
