@@ -1,0 +1,59 @@
+{% extends 'base/base.html' %}
+
+{% block meta %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'main/features.css' %}">
+{% endblock %}
+
+{% block title %} Caracteristicas {% endblock %}
+
+{% block content %}
+
+<section class="companies py-5">
+    <div class="container py-md-5 py-3">
+        <div class="heading">
+            <h3 class="head text-center">Librerías y herramientas utilizadas</h3>
+        </div>
+        <div class="grid mt-5">
+            <div class="marquee">
+                <div class="marquee--inner">
+                    <span>
+                        <div class="orb black">
+                            <div class="iconslash"><img src="{% static 'main/aa.png' %}" /></div>
+                            <p class="">Django es el framework para el diseño web</p>
+                        </div>
+                        <div class="orb red">
+
+                            <p class="">Es el framework utilizado para el dise;o web.</p>
+                        </div>
+                        <div class="orb green">
+
+                            <p class="">Es la libreria que se utilizo para poder emplear los modelos de Machine Learning
+                                en una pagina web</p>
+                        </div>
+                        <div class="orb blue">
+
+                            <p class="">Muchas imagenes fueron sacadas y acreditadas a esta pagina.</p>
+                        </div>
+                    </span>
+                    <span>
+                        <div class="orb pink">
+
+                            <p class="">Es la libreria, agria</p>
+                        </div>
+                        <div class="orb orange">
+
+                            <p class="">Faucibus orci luctus etl ultrices posuere ipsum cubilia curae ultrices mollis
+                                nunc</p>
+                        </div>
+                        <div class="orb black">
+                            <div class="iconslash"><img src="{% static 'main/aa.png' %}" /></div>
+                            <p class="">Django es el framework para el diseño web</p>
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
