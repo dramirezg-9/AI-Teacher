@@ -1,66 +1,101 @@
-from sympy import var, Eq
-from numpy import zeros
+from typing import List, Any, Dict
+from sympy import var, Eq, solve, sqrt, Equality, Add
 from string import ascii_letters
 
+ecuaciones: Dict[str, Any or Add] = {}
+lista_sympy = []
 
-def operacion_binari_ecuaciones(lista_ecuaciones: list, procesos=0) -> int:
-    numero_pasos = len(lista_ecuaciones) - 1
-    if procesos == 0:
-        procesos = zeros(numero_pasos)
 
-    primer_par = lista_ecuaciones[:-1]
-    segundo_par = lista_ecuaciones[1:]
+def operacion_global(matrix: List[list]):
+    """se encarga de ejecutar la evaluacion global paso a paso, aplicando las
+    tres posibles alternativas de ejecucion segun la linea, cambiar de ambiente,
+    guardar linea, evaluar linea"""
 
     error = False
-    i = 0
-    while not error and i < numero_pasos:
-        e1 = primer_par[i]
-        e2 = segundo_par[i]
-        proceso = procesos[i]
-        error = evaluar(e1, e2, proceso)
+    linea_error = -1
+    solucion_temporal = []
+    for i in range(len(matrix)):
+        lectura = matrix[2][i]
+        linea = matrix[1][i]
+        # cambio de ambiente
+        if lectura == 0:
+            solucion_temporal = cambio_ambiente(linea)
+        # guardar ecuacion/solucion
+        elif lectura == 1:
+            guardar_ecuacuacion(linea)
+        # evaluar
+        elif lectura == 2:
+            igual = operacion_binaria(linea, solucion_temporal)
+            if not igual:
+                linea_error = i
+                break
+        else:
+            print("Sintax error, en:", i)
+            break
 
 
+    return linea_error
 
-def evaluar(e1: str, e2: str, despejar=False, solucion=None) -> bool:
-    # transformar a sympy
 
-    paso1 = transformar_a_sympy(e1, despejar)
-    paso2 = transformar_a_sympy(e1, despejar)
-    print("jj")
-    correcto = False
-    if despejar:
-        if paso1.equals(paso2):
-            correcto = True
+def guardar_ecuacuacion(e1: str) -> None:
+    """guarda la ecuacion o solucion que este de la forma:
+     nombre: equacion o nombre: solucion"""
+    partes = e1.split(":")
+    nombre = partes[0]
+    ecuacion = transformar_a_sympy(partes[1])
+    ecuaciones[nombre] = ecuacion
+
+
+def cambio_ambiente(intruccion: str) -> list:
+    """ crea una solucion o soluciones aplicando la instruccion ingresada"""
+    pass
+
+
+def operacion_binaria(ecuacion: str, solucion: list) -> bool:
+    """evalua numericamente tanto """
+    ecuacion = transformar_a_sympy(ecuacion)
+    igual = False
+
+    if type(ecuacion) is Equality:
+
+        ecuacion_s = solve(ecuacion)
+        for e_sol in ecuacion_s:
+            parcial = False
+            for sol in solucion:
+                if e_sol.equals(sol):
+                    parcial = True
+            if not parcial:
+                igual = False
+                break
+
     else:
-        if solucion is None:
-            solucion = solve(paso1)
+        if ecuacion.equals(solucion):
+            igual = True
 
-    return correcto
+    return igual
 
 
-def transformar_a_sympy(linea: str, despejar=False):
-    variables = ""
-    operadores = ["**", "*", "/", "+", "-", "=", "==", ")"]
+def transformar_a_sympy(ecuacion: str):
+    """transforma un str a una ecuacion simbolica en sympy, por el momento solo
+    se permite nombres de variables con una letra"""
 
-    i = 0
-    print(len(linea))
-    while i < len(linea):
-        if linea[i] in ascii_letters and linea[i] not in variables:
-            if 0 < i < (len(linea) - 1) and linea[i + 1] in operadores and linea[i - 1] in operadores or \
-                    i == 0 and linea[i + 1] in operadores or \
-                    i == (len(linea) - 1) and linea[i - 1] in operadores:
-                variables += linea[i] + " "
-            variables += linea[i] + " "
-            print(variables)
-        i += 1
+    str_vars = ""
+    operadores = ["(", "**", "*", "/", "+", "-", "=", ")"]
 
-    if len(variables) > 0:
-        var(variables)
+    for i in range(len(ecuacion)):
+        if ecuacion[i] in ascii_letters and ecuacion[i] not in str_vars:
+            if 0 < i < (len(ecuacion) - 1) and ecuacion[i + 1] in operadores and ecuacion[i - 1] in operadores or \
+                    i == 0 and ecuacion[i + 1] in operadores or \
+                    i == (len(ecuacion) - 1) and ecuacion[i - 1] in operadores:
+                str_vars += ecuacion[i] + " "
 
-    if despejar:
-        convertida = eval(linea)
+    if len(str_vars) > 0:
+        var(str_vars)
+
+    if "=" not in ecuacion:
+        convertida = eval(ecuacion)
     else:
-        partes = linea.split("=")
-        convertida = Eq(partes[0], partes[1])
+        partes = ecuacion.split("=")
+        convertida = Eq(eval(partes[0]), eval(partes[1]))
 
     return convertida
