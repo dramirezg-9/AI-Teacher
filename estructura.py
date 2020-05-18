@@ -14,9 +14,7 @@ def libre1(expresion:str)-> list:
     libres = []
     primaria = parsing(expresion)[-1]
     operaciones = [["+","-"],["*","/"]]
-    
-    
-    
+
     central = operaciones[0]
     operador = primaria
     if primaria in operaciones[1]:
