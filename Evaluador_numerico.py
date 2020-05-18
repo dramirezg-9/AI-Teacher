@@ -15,19 +15,20 @@ def operacion_global(matrix: list) -> int:
     guardar linea, evaluar linea"""
     solucion_temporal = None
     linea_error = -1
-    for i in range(len(matrix[0])):
-
-        lectura = matrix[1][i]
-        linea = matrix[0][i]
+    for i in range(len(matrix)):
+        print(solucion_temporal)
+        lectura = matrix[i][1]
+        linea = matrix[i][0]
         # inclusion de premisas:
+        print(linea)
         if lectura == 0:
             completo = guardar_ecuacuacion(linea, [], False)
             if not completo:
-                print("operacion incorrecta")
+                print("no se pudo guardar")
                 linea_error = i
                 break
         # cambio de ambiente
-        if lectura == 1:
+        elif lectura == 1:
             solucion_temporal = cambio_ambiente(linea, solucion_temporal)
             if solucion_temporal is None:
                 print("error_de_uso")
@@ -37,7 +38,7 @@ def operacion_global(matrix: list) -> int:
         elif lectura == 2:
             completo = guardar_ecuacuacion(linea, solucion_temporal)
             if not completo:
-                print("operacion incorrecta")
+                print("operacion incorrecta/no se pudo guardar")
                 linea_error = i
                 break
         # evaluar
@@ -47,7 +48,9 @@ def operacion_global(matrix: list) -> int:
                 print("operacion incorrecta")
                 linea_error = i
         else:
-            print("Sintax error, en:", i)
+            print("hay un error en la linea {0} tienes que hablar con Diego\nes su asunto, no mio,\nel fue quien no "
+                  "supo que hacer con lo que escribiste\nyo estoy tomando "
+                  "la siesta".format(i))
 
     return linea_error
 
@@ -61,9 +64,11 @@ def guardar_ecuacuacion(e1: str, solucion: list, evaluar=True) -> bool:
     igual = False
     if evaluar:
         igual = operacion_binaria(partes[1], solucion)
+        print(igual)
     else:
         igual = True
     if igual:
+        good = True
         ecuacion = transformar_a_sympy(partes[1])
         ecuaciones_totales[nombre] = ecuacion
         if igual:
@@ -110,6 +115,7 @@ def cambio_ambiente(instruccion: str, antiguas: Add or list or None) -> list or 
                     base = transformar_a_sympy(listado[1])
                 else:
                     base = ecuaciones_totales[listado[1]]
+
     else:
         dead_end = True
 
@@ -216,3 +222,4 @@ def camino_muerto(niveles: list) -> bool:
         dead_end = True
 
     return dead_end
+
