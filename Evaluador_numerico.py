@@ -16,11 +16,11 @@ def operacion_global(matrix: list) -> int:
     solucion_temporal = None
     linea_error = -1
     for i in range(len(matrix)):
-        print(solucion_temporal)
+        print("solucion", solucion_temporal)
         lectura = matrix[i][1]
         linea = matrix[i][0]
         # inclusion de premisas:
-        print(linea)
+        print("linea", linea)
         if lectura == 0:
             completo = guardar_ecuacuacion(linea, [], False)
             if not completo:
@@ -81,7 +81,7 @@ def guardar_ecuacuacion(e1: str, solucion: list, evaluar=True) -> bool:
 
 def cambio_ambiente(instruccion: str, antiguas: Add or list or None) -> list or None:
     """ crea una solucion o soluciones aplicando la instruccion ingresada"""
-    cambio_amb = []
+    cambio_amb = {}
     listado = instruccion.split()
     etiquetas = ["en", "con", "apl", "aplicando", "y", ","]
     procesos = {"/en/": 1, "en": 1, "con": 2, "/apl/": 3, "apl": 3, "aplicando": 3, "&": "c"}
@@ -101,13 +101,13 @@ def cambio_ambiente(instruccion: str, antiguas: Add or list or None) -> list or 
                 lista_ecuaciones_base = []
                 i = 1
                 apply = False
-                if listado[0] == 1:
-                    while i < len(niveles) and not apply:
-                        if niveles[i] == 0:
-                            ecuacuion = ecuaciones_totales[listado[i]]
-                            lista_ecuaciones_base.append(ecuacuion)
-                        elif niveles[i] == 3:
-                            apply = True
+
+                while i < len(niveles) and not apply:
+                    if niveles[i] == 0:
+                        ecuacuion = ecuaciones_totales[listado[i]]
+                        lista_ecuaciones_base.append(ecuacuion)
+                    elif niveles[i] == 3:
+                        apply = True
                     i += 1
                 base = solve(lista_ecuaciones_base)
             elif niveles[0] == 1:
@@ -120,25 +120,33 @@ def cambio_ambiente(instruccion: str, antiguas: Add or list or None) -> list or 
         dead_end = True
 
     # hay aplicaciones ?00
-    if not dead_end and 3 in niveles:
-        # Definir las aplicaciones(llamadas sustituciones)
-        sustituciones = []
-        comienzo = niveles.index(3) + 1
-        for elemento, nivel in listado[comienzo:], niveles[comienzo:]:
-            if nivel == 0:
-                sustituciones.append(elemento)
+    if not dead_end:
+        if 3 in niveles:
+            # Definir las aplicaciones(llamadas sustituciones)
+            sustituciones = []
+            comienzo = niveles.index(3) + 1
+            for elemento, nivel in zip(listado[comienzo:], niveles[comienzo:]):
+                if nivel == 0:
+                    sustituciones.append(elemento)
 
-        for eq in base:
-            nueva_eq = eq
-            for sustitucion in sustituciones:
-                susti = soluciones_desarrollo[sustitucion].args
-                nueva_eq = nueva_eq.sub(susti[0], susti[1])
-            cambio_amb.append(nueva_eq)
+            for eq1, eq2 in base.items():
+                nueva_eq = Eq(eq1, eq2)
+                print(nueva_eq)
+
+                for sustitucion in sustituciones:
+                    susti = soluciones_desarrollo[sustitucion].args
+                    print(susti)
+                    nueva_eq = nueva_eq.subs(susti[0], susti[1])
+                print(nueva_eq)
+                cambio_amb[nueva_eq.args[0]] = nueva_eq.args[1]
+
+        else:
+            cambio_amb = base
 
     return cambio_amb
 
 
-def operacion_binaria(ecuacion: str, solucion: list) -> bool:
+def operacion_binaria(ecuacion: str, solucion: dict) -> bool:
     """evalua numericamente tanto """
     ecuacion = transformar_a_sympy(ecuacion)
     igual = False
@@ -147,10 +155,11 @@ def operacion_binaria(ecuacion: str, solucion: list) -> bool:
         igual = True
 
     elif type(ecuacion) is Equality:
-        ecuacion_s = solve(ecuacion, variable_despeje(ecuacion))
-        for e_sol in ecuacion_s:
+        ecuacion_s = solve([ecuacion])
+        print(solucion, "vs", ecuacion_s)
+        for e_sol in ecuacion_s.values():
             parcial = False
-            for sol in solucion:
+            for sol in solucion.values():
                 if e_sol == sol:
                     parcial = True
             if not parcial:
@@ -216,10 +225,10 @@ def camino_muerto(niveles: list) -> bool:
     elif 2 in niveles:
         if niveles.count(2) > 1:  # #solo puede haber una aplicacion nivel 2
             dead_end = True
+            print("esto1")
         if niveles.index(2) != 0:  # solo puede estar al inicio
             dead_end = True
+            print("esto2")
     elif niveles.count(3) > 1 or niveles.index(3) != 0:
         dead_end = True
-
     return dead_end
-
