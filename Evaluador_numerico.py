@@ -1,63 +1,85 @@
 from sympy import var, Eq, solve, sqrt, Equality, Add, Symbol
 from string import ascii_letters
 
-ecuaciones = {}
+soluciones_desarrollo = {}
+premisas = {}
 lista_sympy = []
+ecuaciones_totales = {}
 
 
-def operacion_global(matrix: list):
+# ecuaciones totales es la mezcla entre premisas y soluciones de desarrollo
+
+def operacion_global(matrix: list) -> int:
     """se encarga de ejecutar la evaluacion global paso a paso, aplicando las
     tres posibles alternativas de ejecucion segun la linea, cambiar de ambiente,
     guardar linea, evaluar linea"""
-    solucion_temporal = []
+    solucion_temporal = None
     linea_error = -1
     for i in range(len(matrix[0])):
 
         lectura = matrix[1][i]
         linea = matrix[0][i]
-        # cambio de ambiente
+        # inclusion de premisas:
         if lectura == 0:
+            completo = guardar_ecuacuacion(linea, [], False)
+            if not completo:
+                print("operacion incorrecta")
+                linea_error = i
+                break
+        # cambio de ambiente
+        if lectura == 1:
             solucion_temporal = cambio_ambiente(linea, solucion_temporal)
             if solucion_temporal is None:
                 print("error_de_uso")
                 linea_error = i
                 break
         # guardar ecuacion/solucion
-        elif lectura == 1:
-            igual = guardar_ecuacuacion(linea, solucion_temporal)
-            if not igual:
+        elif lectura == 2:
+            completo = guardar_ecuacuacion(linea, solucion_temporal)
+            if not completo:
                 print("operacion incorrecta")
                 linea_error = i
+                break
         # evaluar
-        elif lectura == 2:
+        elif lectura == 3:
             igual = operacion_binaria(linea, solucion_temporal)
             if not igual:
                 print("operacion incorrecta")
                 linea_error = i
-
         else:
             print("Sintax error, en:", i)
 
     return linea_error
 
 
-def guardar_ecuacuacion(e1: str, solucion: list) -> bool:
+def guardar_ecuacuacion(e1: str, solucion: list, evaluar=True) -> bool:
     """guarda la ecuacion o solucion que este de la forma:
      nombre: equacion o nombre: solucion"""
     partes = e1.split(":")
     nombre = partes[0]
-    igual = operacion_binaria(partes[1], solucion)
-    ecuacion = transformar_a_sympy(partes[1])
-    ecuaciones[nombre] = ecuacion
-    return igual
+    good = False
+    igual = False
+    if evaluar:
+        igual = operacion_binaria(partes[1], solucion)
+    else:
+        igual = True
+    if igual:
+        ecuacion = transformar_a_sympy(partes[1])
+        ecuaciones_totales[nombre] = ecuacion
+        if igual:
+            soluciones_desarrollo[nombre] = ecuacion
+        elif not evaluar:
+            premisas[nombre] = ecuacion
+
+    return good
 
 
-def cambio_ambiente(instruccion: str, antiguas: Add or Equality) -> list or None:
+def cambio_ambiente(instruccion: str, antiguas: Add or list or None) -> list or None:
     """ crea una solucion o soluciones aplicando la instruccion ingresada"""
     cambio_amb = []
     listado = instruccion.split()
     etiquetas = ["en", "con", "apl", "aplicando", "y", ","]
-    procesos = {"/en/": 1, "en": 1, "/con/": 2, "con": 2, "/apl/": 3, "apl": 3, "aplicando": 3, "&": "c"}
+    procesos = {"/en/": 1, "en": 1, "con": 2, "/apl/": 3, "apl": 3, "aplicando": 3, "&": "c"}
     niveles = []
     dead_end = False
     base = antiguas
@@ -67,41 +89,44 @@ def cambio_ambiente(instruccion: str, antiguas: Add or Equality) -> list or None
     if not camino_muerto(niveles):
         # definir la base
         # cambia la ecuacuacion a trabajar? etiquetas "En" y "con" y otras de nivel 1 o nivel 2:
-        base = None
-        if niveles[0] == 3:  # no cambia la ecuacuacion base
-            if antiguas is not None: # si se ejecuta una aplicacion antes de existir amnbiente
-                dead_end = True
+        if niveles[0] == 3:  # no cambia la ecuacuacion/solucion base
+            pass
         else:  # cambia la ecuacuacion a trabajar
             if niveles[0] == 2:
                 lista_ecuaciones_base = []
                 i = 1
                 apply = False
-                if listado[0] == "/con/":
+                if listado[0] == 1:
                     while i < len(niveles) and not apply:
                         if niveles[i] == 0:
-                            transformada = transformar_a_sympy(listado[i])
-                            lista_ecuaciones_base.append(transformada)
+                            ecuacuion = ecuaciones_totales[listado[i]]
+                            lista_ecuaciones_base.append(ecuacuion)
                         elif niveles[i] == 3:
                             apply = True
                     i += 1
                 base = solve(lista_ecuaciones_base)
             elif niveles[0] == 1:
-                base = transformar_a_sympy(listado[1])
+                if listado[0] == "/en/":
+                    base = transformar_a_sympy(listado[1])
+                else:
+                    base = ecuaciones_totales[listado[1]]
     else:
         dead_end = True
-    # hay aplicaciones ?
+
+    # hay aplicaciones ?00
     if not dead_end and 3 in niveles:
         # Definir las aplicaciones(llamadas sustituciones)
         sustituciones = []
-        comienzo = niveles.index(3)+1
+        comienzo = niveles.index(3) + 1
         for elemento, nivel in listado[comienzo:], niveles[comienzo:]:
             if nivel == 0:
                 sustituciones.append(elemento)
+
         for eq in base:
             nueva_eq = eq
             for sustitucion in sustituciones:
-                susti = ecuaciones[sustitucion].args
-                nueva = nueva.sub(susti[0], susti[1])
+                susti = soluciones_desarrollo[sustitucion].args
+                nueva_eq = nueva_eq.sub(susti[0], susti[1])
             cambio_amb.append(nueva_eq)
 
     return cambio_amb
@@ -112,7 +137,10 @@ def operacion_binaria(ecuacion: str, solucion: list) -> bool:
     ecuacion = transformar_a_sympy(ecuacion)
     igual = False
 
-    if type(ecuacion) is Equality:
+    if solucion is None:
+        igual = True
+
+    elif type(ecuacion) is Equality:
         ecuacion_s = solve(ecuacion, variable_despeje(ecuacion))
         for e_sol in ecuacion_s:
             parcial = False
@@ -120,8 +148,9 @@ def operacion_binaria(ecuacion: str, solucion: list) -> bool:
                 if e_sol == sol:
                     parcial = True
             if not parcial:
-                igual = False
                 break
+        if parcial:
+            igual = True
 
     else:
         if ecuacion.equals(solucion):
