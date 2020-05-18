@@ -76,7 +76,7 @@ def cambio_ambiente(instruccion: str, antiguas: Add or Equality) -> list or None
                 lista_ecuaciones_base = []
                 i = 1
                 apply = False
-                if listado[0] == "/con/"
+                if listado[0] == "/con/":
                     while i < len(niveles) and not apply:
                         if niveles[i] == 0:
                             transformada = transformar_a_sympy(listado[i])
