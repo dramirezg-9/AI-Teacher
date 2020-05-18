@@ -11,6 +11,8 @@ def index(request):
 def solve(request):
     return render(request, 'solve/solve.html')
 
+def features(request):
+    return render(request, 'features/features.html')
 
 def grade(request):
     history = json.loads(request.POST["history"])

@@ -1,0 +1,21 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block title %} AI-Teacher {% endblock %}
+{% block styles %} <link rel="stylesheet" href="{% static 'css/solve.css' %}"> {% endblock%}
+{% block content %}
+<input id = "equation_editor">
+<div id = "error_msg"></div>
+<button type="button" class = "btn btn-primary" id="add-btn" style="width: 200px; margin: 0 auto">Añadir</button>
+<button type="button" class = "btn btn-primary" id="history-btn" style="width: 200px;
+margin: 30px auto 10px auto"><i class="fas fa-bars"></i> Historial  </button>
+
+<div id = "history"></div>
+
+<button type="button" class= "btn btn-primary" id="submit-btn" style="width: 200px; margin: 20px auto">Evaluar</button>
+
+<div id="correction"><div class="counter"><p>1</p></div></div>
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'jquery-plugins/jquery-cookie.js' %}"></script>
+<script src="{% static 'js/solve.js' %}"></script>
+{% endblock %}
