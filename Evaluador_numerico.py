@@ -22,7 +22,7 @@ def operacion_global(matrix: list) -> int:
         # inclusion de premisas:
         print("linea", linea)
         if lectura == 0:
-            completo = guardar_ecuacuacion(linea, [], False)
+            completo = guardar_ecuacuacion(linea, {}, False)
             if not completo:
                 print("no se pudo guardar")
                 linea_error = i
@@ -47,6 +47,7 @@ def operacion_global(matrix: list) -> int:
             if not igual:
                 print("operacion incorrecta")
                 linea_error = i
+                break
         else:
             print("hay un error en la linea {0} tienes que hablar con Diego\nes su asunto, no mio,\nel fue quien no "
                   "supo que hacer con lo que escribiste\nyo estoy tomando "
@@ -55,7 +56,7 @@ def operacion_global(matrix: list) -> int:
     return linea_error
 
 
-def guardar_ecuacuacion(e1: str, solucion: list, evaluar=True) -> bool:
+def guardar_ecuacuacion(e1: str, solucion: dict, evaluar=True) -> bool:
     """guarda la ecuacion o solucion que este de la forma:
      nombre: equacion o nombre: solucion"""
     partes = e1.split(":")
@@ -137,8 +138,8 @@ def cambio_ambiente(instruccion: str, antiguas: Add or list or None) -> list or 
                     susti = soluciones_desarrollo[sustitucion].args
                     print(susti)
                     nueva_eq = nueva_eq.subs(susti[0], susti[1])
+                cambio_amb = solve([nueva_eq])
                 print(nueva_eq)
-                cambio_amb[nueva_eq.args[0]] = nueva_eq.args[1]
 
         else:
             cambio_amb = base
@@ -152,21 +153,34 @@ def operacion_binaria(ecuacion: str, solucion: dict) -> bool:
     igual = False
 
     if solucion is None:
-        igual = True
-
+        print("aun no se ha definido un ambiente")
     elif type(ecuacion) is Equality:
         ecuacion_s = solve([ecuacion])
         print(solucion, "vs", ecuacion_s)
-        for e_sol in ecuacion_s.values():
-            parcial = False
-            for sol in solucion.values():
-                if e_sol == sol:
-                    parcial = True
-            if not parcial:
-                break
-        if parcial:
-            igual = True
-
+        if True:
+            for letra_n, valor_n in ecuacion_s.items():
+                prueba = Eq(letra_n, valor_n)
+                for letra, valor in solucion.items():
+                    prueba = prueba.subs(letra, valor)
+                    print(prueba)
+                if prueba == True:
+                    igual = True
+                else:
+                    igual = False
+                    break
+        print(igual)
+        """
+        else:
+            for e_sol in ecuacion_s.values():
+                parcial = False
+                for sol in solucion.values():
+                    if e_sol == sol:
+                        parcial = True
+                if not parcial:
+                    break
+            if parcial:
+                igual = True
+        """
     else:
         if ecuacion.equals(solucion):
             igual = True
