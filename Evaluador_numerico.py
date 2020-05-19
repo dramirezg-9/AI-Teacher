@@ -15,7 +15,8 @@ def operacion_global(matrix: list) -> int:
     guardar linea, evaluar linea"""
     solucion_temporal = None
     linea_error = -1
-    for i in range(len(matrix)):
+    i = 0
+    while i < len(matrix) and linea_error == -1:
         print("solucion", solucion_temporal)
         lectura = matrix[i][1]
         linea = matrix[i][0]
@@ -26,32 +27,29 @@ def operacion_global(matrix: list) -> int:
             if not completo:
                 print("no se pudo guardar")
                 linea_error = i
-                break
         # cambio de ambiente
         elif lectura == 1:
             solucion_temporal = cambio_ambiente(linea, solucion_temporal)
             if solucion_temporal is None:
                 print("error_de_uso")
                 linea_error = i
-                break
         # guardar ecuacion/solucion
         elif lectura == 2:
             completo = guardar_ecuacuacion(linea, solucion_temporal)
             if not completo:
                 print("operacion incorrecta/no se pudo guardar")
                 linea_error = i
-                break
         # evaluar
         elif lectura == 3:
             igual = operacion_binaria(linea, solucion_temporal)
             if not igual:
                 print("operacion incorrecta")
                 linea_error = i
-                break
         else:
             print("hay un error en la linea {0} tienes que hablar con Diego\nes su asunto, no mio,\nel fue quien no "
                   "supo que hacer con lo que escribiste\nyo estoy tomando "
                   "la siesta".format(i))
+        i += 1
 
     return linea_error
 
@@ -62,19 +60,19 @@ def guardar_ecuacuacion(e1: str, solucion: dict, evaluar=True) -> bool:
     partes = e1.split(":")
     nombre = partes[0]
     good = False
-    igual = False
+
     if evaluar:
         igual = operacion_binaria(partes[1], solucion)
-        print(igual)
     else:
         igual = True
+
     if igual:
         good = True
         ecuacion = transformar_a_sympy(partes[1])
         ecuaciones_totales[nombre] = ecuacion
-        if igual:
+        if evaluar:
             soluciones_desarrollo[nombre] = ecuacion
-        elif not evaluar:
+        else:
             premisas[nombre] = ecuacion
 
     return good
@@ -82,7 +80,7 @@ def guardar_ecuacuacion(e1: str, solucion: dict, evaluar=True) -> bool:
 
 def cambio_ambiente(instruccion: str, antiguas: Add or list or None) -> list or None:
     """ crea una solucion o soluciones aplicando la instruccion ingresada"""
-    cambio_amb = {}
+    cambio_amb = None
     listado = instruccion.split()
     etiquetas = ["en", "con", "apl", "aplicando", "y", ","]
     procesos = {"/en/": 1, "en": 1, "con": 2, "/apl/": 3, "apl": 3, "aplicando": 3, "&": "c"}
@@ -97,12 +95,12 @@ def cambio_ambiente(instruccion: str, antiguas: Add or list or None) -> list or 
         # cambia la ecuacuacion a trabajar? etiquetas "En" y "con" y otras de nivel 1 o nivel 2:
         if niveles[0] == 3:  # no cambia la ecuacuacion/solucion base
             pass
-        else:  # cambia la ecuacuacion a trabajar
+        else:  # cambia la ecuacuacion a trabajar, la base
+
             if niveles[0] == 2:
                 lista_ecuaciones_base = []
                 i = 1
                 apply = False
-
                 while i < len(niveles) and not apply:
                     if niveles[i] == 0:
                         ecuacuion = ecuaciones_totales[listado[i]]
@@ -111,8 +109,9 @@ def cambio_ambiente(instruccion: str, antiguas: Add or list or None) -> list or 
                         apply = True
                     i += 1
                 base = solve(lista_ecuaciones_base)
+
             elif niveles[0] == 1:
-                if listado[0] == "/en/":
+                if listado[0] == "/en/":  # TODO revisar este caso
                     base = transformar_a_sympy(listado[1])
                 else:
                     base = ecuaciones_totales[listado[1]]
@@ -120,7 +119,7 @@ def cambio_ambiente(instruccion: str, antiguas: Add or list or None) -> list or 
     else:
         dead_end = True
 
-    # hay aplicaciones ?00
+    # hay aplicaciones ?
     if not dead_end:
         if 3 in niveles:
             # Definir las aplicaciones(llamadas sustituciones)
@@ -129,17 +128,23 @@ def cambio_ambiente(instruccion: str, antiguas: Add or list or None) -> list or 
             for elemento, nivel in zip(listado[comienzo:], niveles[comienzo:]):
                 if nivel == 0:
                     sustituciones.append(elemento)
-
-            for eq1, eq2 in base.items():
-                nueva_eq = Eq(eq1, eq2)
-                print(nueva_eq)
-
+            if type(base) is dict:
+                for eq1, eq2 in base.items():
+                    nueva_eq = Eq(eq1, eq2)
+                    for sustitucion in sustituciones:
+                        susti = ecuaciones_totales[sustitucion].args
+                        nueva_eq = nueva_eq.subs(susti[0], susti[1])
+                    cambio_amb = solve([nueva_eq])
+                    print(nueva_eq)
+            elif type(base) is Add:
+                nueva_eq = base
                 for sustitucion in sustituciones:
-                    susti = soluciones_desarrollo[sustitucion].args
-                    print(susti)
+                    susti = ecuaciones_totales[sustitucion].args
                     nueva_eq = nueva_eq.subs(susti[0], susti[1])
-                cambio_amb = solve([nueva_eq])
+                cambio_amb = nueva_eq
                 print(nueva_eq)
+            else:
+                print("hay algo mal creando la base")
 
         else:
             cambio_amb = base
@@ -157,7 +162,8 @@ def operacion_binaria(ecuacion: str, solucion: dict) -> bool:
     elif type(ecuacion) is Equality:
         ecuacion_s = solve([ecuacion])
         print(solucion, "vs", ecuacion_s)
-        if True:
+
+        if True:  # TODO: revisar las implicaciones de esta forma
             for letra_n, valor_n in ecuacion_s.items():
                 prueba = Eq(letra_n, valor_n)
                 for letra, valor in solucion.items():
@@ -168,19 +174,7 @@ def operacion_binaria(ecuacion: str, solucion: dict) -> bool:
                 else:
                     igual = False
                     break
-        print(igual)
-        """
-        else:
-            for e_sol in ecuacion_s.values():
-                parcial = False
-                for sol in solucion.values():
-                    if e_sol == sol:
-                        parcial = True
-                if not parcial:
-                    break
-            if parcial:
-                igual = True
-        """
+
     else:
         if ecuacion.equals(solucion):
             igual = True
@@ -214,7 +208,10 @@ def transformar_a_sympy(ecuacion: str):
     return convertida
 
 
+# variable_despeje en desuso
 def variable_despeje(ecuacuacion: Add or Equality) -> Symbol:
+    """ retorna la varible generica para despejar dentro de la expresion o equacion,
+    en base al orden alfabetico toma la menor"""
     lista_variables = list(ecuacuacion.free_symbols)
     generica = lista_variables[0]
     for opc in lista_variables:
@@ -223,26 +220,43 @@ def variable_despeje(ecuacuacion: Add or Equality) -> Symbol:
     return generica
 
 
+# variable_despeje en desuso
+
+
 def camino_muerto(niveles: list) -> bool:
     dead_end = False
     if 1 in niveles:
-        if niveles.count(1) > 1:  # #solo puede haber una aplicacion nivel 1
+        if niveles.count(1) > 1:  # solo puede haber una aplicacion nivel 1
+            print("olo puede haber una aplicacion nivel 1")
             dead_end = True
         if niveles.index(1) != 0:  # solo puede estar al inicio
+            print("la llamada de nivel 1 solo puede estar al inicio")
             dead_end = True
         elif 2 in niveles:  # no puede haber los dos mismos tipos de sentencia
+            print("no puede haber sentencia de nivel 1 y nivel 2 al mismo tiempo")
             dead_end = True
         elif 3 in niveles and niveles.index(3) > 2:  # solo se puede hacer una por cada llamda
+            print("para el nivel 1, solo se puede trabajar con una expresion a la vez")
             dead_end = True
         elif len(niveles) > 2:  # solo puede haber una aplicacion nivel 1
+            print("para el nivel 1, solo se puede trabajar con una expresion a la vez")
             dead_end = True
     elif 2 in niveles:
-        if niveles.count(2) > 1:  # #solo puede haber una aplicacion nivel 2
+        if niveles.count(2) > 1:  # solo puede haber una aplicacion nivel 2
             dead_end = True
-            print("esto1")
-        if niveles.index(2) != 0:  # solo puede estar al inicio
+            print("solo puede haber una aplicacion nivel 2")
+        if niveles[0] != 2:  # solo puede estar al inicio
             dead_end = True
-            print("esto2")
-    elif niveles.count(3) > 1 or niveles.index(3) != 0:
+            print("la llamada de nivel 2 solo puede estar al inicio")
+    elif 3 in niveles:
+        if niveles.count(3) > 1:
+            print("olo puede haber una aplicacion nivel 3")
+            dead_end = True
+        elif niveles[0] == 3:
+            print("si no hay llamadas de nivel 1 o 2, la llamada de nivel 3 tiene que estar al inicio")
+            dead_end = True
+    else:
+        print("diego esto no era un cambio de ambiente")
         dead_end = True
+
     return dead_end
