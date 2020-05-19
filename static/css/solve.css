@@ -92,16 +92,26 @@ main{
 #correction {
     display: grid;
     grid-template-columns: 40px auto;
-    width: 800px;
     margin: 0 auto;
+    grid-row-gap: 10px;
+    grid-column-gap: 10px;
+    width: 800px;
 }
 
     .correction-title {
         font-size: 20px;
         font-weight: bold;
         grid-column-start: 1;
-        grid-column-end: 2;
+        grid-column-end: 3;
         grid-row: 1;
+        text-align: center;
+    }
+    .correcto{
+        font-size: 20px;
+        grid-column-start: 1;
+        grid-column-end: 3;
+        grid-row: 2;
+        text-align: center;
     }
 
     #correction .counter{
@@ -110,8 +120,6 @@ main{
         color: white;
         border-radius: 20px;
         background: #7CB9E8;
-        grid-row-gap: 10px;
-        grid-column-gap: 10px;
         grid-column: 1;
         grid-row: 2;
     }

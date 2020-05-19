@@ -102,6 +102,7 @@ count = 0
     // arrastrar la ecuación
     function dragBars(e){
         // se inicializan el número de la ecuación y el movible
+        console.log(history['main'])
         var num = 0;
         var mover = null;
         if(e.target.id){
@@ -186,6 +187,7 @@ count = 0
 
         // funcion cuando se levanta el mouse
         document.onmouseup = function(e){
+            console.log(history)
             // remover todos los elementos temporales
             phantom.parentNode.removeChild(phantom);
             document.onmousemove = null;
@@ -211,6 +213,7 @@ count = 0
                 pos = parseInt(cn.innerHTML.slice(1,-1));
                 history[letter].splice(pos, 1);
             }
+            history['main'].splice(num, 1)
 
             var replace = pos;
 
@@ -259,6 +262,7 @@ count = 0
             cn.id = "cn"+lastI.toString();
             eq.id = "eq"+lastI.toString();
             deleter.id = "deleter"+lastI.toString();
+            history['main'].splice(lastI, 0, eq.innerHTML)
 
             // se reinsertan y se quita la linea verde
             eqHistory.insertBefore(mover, line);
@@ -272,6 +276,7 @@ count = 0
             cn.style.display = 'inline';
             eq.style.display = 'inline';
             deleter.style.display = 'inline';
+            console.log(history)
         };
     }
     
@@ -404,6 +409,10 @@ count = 0
     }
 
     // código inicial
+    document.getElementsByTagName('main')[0].style.marginBottom = document.getElementsByClassName('page-footer')[0].getBoundingClientRect().height.toString() + 'px'
     document.getElementById("history-btn").addEventListener("click", toggleVisibility)
     document.getElementById("add-btn").addEventListener("click", addToHistory)
     document.getElementById("submit-btn").addEventListener("click", submitExercise)
+    window.onresize = function(){
+        document.getElementsByName('main')[0].style.marginBottom = document.getElementsByClassName('page-footer')[0].getBoundingClientRect().height.toString() + 'px'
+    }

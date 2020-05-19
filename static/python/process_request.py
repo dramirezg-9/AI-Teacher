@@ -33,7 +33,7 @@ def transform_history(history: dict) -> list:
 
             # inicializacion
             if ID:
-                equation = equation.replace(' ', '')
+                equation = adapt_equation(equation)
                 if ID[0] == 'E':
                     eq_type = 'inicializacion'
                 else:
@@ -46,7 +46,7 @@ def transform_history(history: dict) -> list:
 
             # ecuacion y desarrollo
             else:
-                equation = equation.replace(' ', '')
+                equation = adapt_equation(equation)
                 eq_type = 'desarrollo'
 
             numeros = {
@@ -61,6 +61,23 @@ def transform_history(history: dict) -> list:
                 add = ID + ':' + equation
             res.append([add, number])
         return res
+
+
+def adapt_equation(equation: str) -> str:
+    temp = equation.replace(' ', '')
+    operators = ['+', '-', '*', '/', '^', '=']
+    last = ''
+    res = ''
+    for x in temp:
+        if x.isalpha():
+            if last in operators or not last:
+                res += x
+            else:
+                res += '*' + x
+        else:
+            res += x
+        last = x
+    return res
 
 
 def process_request(history: dict):
