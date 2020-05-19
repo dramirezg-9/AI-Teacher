@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
+from static.python.process_request import process_request
 
 
 def index(request):
@@ -11,12 +12,15 @@ def index(request):
 def solve(request):
     return render(request, 'solve/solve.html')
 
+
 def features(request):
     return render(request, 'features/features.html')
 
+
 def grade(request):
     history = json.loads(request.POST["history"])
-    return JsonResponse(history)
+    processed_history = process_request(history)
+    return JsonResponse(processed_history)
 
 
 def about(request):
