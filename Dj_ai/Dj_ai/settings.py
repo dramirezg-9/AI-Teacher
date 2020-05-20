@@ -20,20 +20,21 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
+SECRET_KEY = "test"
+# SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-os.getenv('DJANGO_DEBUG', False)
+DEBUG = True
+# DEBUG = os.getenv('DJANGO_DEBUG', False)
 
-ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '127.0.0.1').split(',')
+ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '127.0.0.1').split(',')
 
 
 # Application definition
 
 INSTALLED_APPS = [
     'main.apps.MainConfig',
-    'AI_in.apps.AiInConfig',
-    'AI_out.apps.AiOutConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -77,23 +78,23 @@ WSGI_APPLICATION = 'Dj_ai.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
-
 DATABASES = {
     'default': {
-        "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
-        'NAME': os.getenv('DATABASE_NAME', os.path.join(BASE_DIR, "db.sqlite3"),
-        'USER': os.getenv('DATABASE_USERNAME', 'user'),
-        'PASSWORD': os.getenv('DATABASE_PASSWORD', 'password'),
-        'HOST': os.getenv('DATABASE_HOST', '127.0.0.1'),
-        'PORT': os.getenv('DATABASE_PORT', 5432),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
+#         'NAME': os.getenv('DATABASE_NAME', os.path.join(BASE_DIR, "db.sqlite3")),
+#         'USER': os.getenv('DATABASE_USERNAME', 'user'),
+#         'PASSWORD': os.getenv('DATABASE_PASSWORD', 'password'),
+#         'HOST': os.getenv('DATABASE_HOST', '127.0.0.1'),
+#         'PORT': os.getenv('DATABASE_PORT', 5432),
+#     }
+# }
 
 
 # Password validation
