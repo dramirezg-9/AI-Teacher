@@ -1,0 +1,156 @@
+{% extends 'base/base.html' %}
+{% block meta %}
+{% load static %}
+{% endblock %}
+{% block title %} Caracteristicas {% endblock %}
+
+{% block content %}
+
+
+<div class="container-fluid p-5 bg-secondary vh-100">
+    <div class="d-flex justify-content-center m-5 p-5">
+        <h1>Librerias y herramientas usadas.</h1>
+    </div>
+
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+        </ol>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <div class="d-flex justify-content-center p-5">
+                    <div class="card-deck">
+                        <div class="card" style="width: 18rem;">
+                            <div class="container p-4" style="width: 200px; height: 200px;">
+                                <img src="{% static 'main/django_icon.svg' %}" class="card-img-top">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Django</h5>
+                                <p class="card-text">Django es un framework web orientado en python.</p>
+                                <a href="https://www.djangoproject.com/" class="btn btn-primary">Go Django</a>
+                            </div>
+                        </div>
+                        <div class="card" style="width: 18rem;">
+                            <div class="container p-4" style="width: 200px; height: 200px;">
+                                <img src="{% static 'main/docker_icon.svg' %}" class="card-img-top">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Docker</h5>
+                                <p class="card-text">Docker es una herramienta que automatiza procesos del despliege
+                                    de
+                                    aplicaciones a la ves que asegura el control de estas.</p>
+                                <a href="https://www.docker.com/" class="btn btn-primary">Go Docker</a>
+                            </div>
+                        </div>
+                        <div class="card" style="width: 18rem;">
+                            <div class="container p-4" style="width: 200px; height: 200px;">
+                                <img src="{% static 'main/bootstrap_icon.svg' %}" class="card-img-top">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Bootstrap</h5>
+                                <p class="card-text">Bootstrap es una biblioteca de diseño basado en css.</p>
+                                <a href="https://getbootstrap.com/" class="btn btn-primary">Go Bootstrap</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="d-flex justify-content-center p-5">
+                    <div class="card-deck">
+
+                        <div class="card" style="width: 18rem;">
+                            <div class="container p-4" style="width: 200px; height: 200px;">
+                                <img src="{% static 'main/gunicorn_icon.svg' %}" class="card-img-top">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Gunicorn</h5>
+                                <p class="card-text">Gunicorn es una interfaz que hace de interprete entre django y el
+                                    servidor.</p>
+                                <a href="https://gunicorn.org/" class="btn btn-primary">Go Gunicorn</a>
+                            </div>
+                        </div>
+                        <div class="card" style="width: 18rem;">
+                            <div class="container p-4" style="width: 200px; height: 200px;">
+                                <img src="{% static 'main/nginx_icon.svg' %}" class="card-img-top">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Nginx</h5>
+                                <p class="card-text">Nginx es uno de los servidores web mas usados en la industria junto
+                                    a
+                                    Apache.</p>
+                                <a href="https://www.nginx.com/" class="btn btn-primary">Go Nginx</a>
+                            </div>
+                        </div>
+                        <div class="card" style="width: 18rem;">
+                            <div class="container p-4" style="width: 200px; height: 200px;">
+                                <img src="{% static 'main/digitalocean_icon.svg' %}" class="card-img-top">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Digital Ocean</h5>
+                                <p class="card-text">Digital OCean es una de las plataformas mas poplulares de servicios
+                                    en la nube.
+                                </p>
+                                <a href="https://www.digitalocean.com/" class="btn btn-primary">Go Digital Ocean</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="d-flex justify-content-center p-5">
+                    <div class="card-deck">
+                        <div class="card" style="width: 18rem;">
+                            <div class="container p-4" style="width: 200px; height: 200px;">
+                                <img src="{% static 'main/postgresql_icon.svg' %}" class="card-img-top">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Postgres</h5>
+                                <p class="card-text">PostgreSQL es un sistema de gestion de bases de datos mas populares
+                                    y
+                                    de codigo abierto.
+                                </p>
+                                <a href="https://www.postgresql.org/" class="btn btn-primary">Go Postgres</a>
+                            </div>
+                        </div>
+                        <div class="card" style="width: 18rem;">
+                            <div class="container p-4" style="width: 200px; height: 200px;">
+                                <img src="{% static 'main/git_icon.svg' %}" class="card-img-top">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Git</h5>
+                                <p class="card-text">Git es la herramienta de control de versiones mas utilizada a nivel
+                                    global
+                                </p>
+                                <a href="https://git-scm.com/" class="btn btn-primary">Go Git</a>
+                            </div>
+                        </div>
+                        <div class="card" style="width: 18rem;">
+                            <div class="container p-4" style="width: 200px; height: 200px;">
+                                <img src="{% static 'main/github_icon.svg' %}" class="card-img-top">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Github</h5>
+                                <p class="card-text">Github es la plataforma mas grande de repositorios de git.
+                                </p>
+                                <a href="https://github.com/" class="btn btn-primary">Go Github</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+</div>
+{% endblock %}
