@@ -134,5 +134,6 @@ USE_TZ = True
 # The URL of which the static files in STATIC_ROOT directory are served(by Apache or nginx..etc). Example: /static/ or http://static.example.com/
 STATIC_URL = '/static/'
 # The absolute path to the directory where ./manage.py collectstatic will collect static files for deployment. Example: STATIC_ROOT="/var/www/example.com/static/"
-STATIC_ROOT = ''
-STATICFILES_DIRS = ( os.path.join('static'), )
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
+STATICFILES_DIRS = (os.path.join('static'), )
