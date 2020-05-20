@@ -1,0 +1,170 @@
+main{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+#explanation {
+    display: grid;
+    width: 800px;
+    grid-template-columns: 1fr 1fr;
+    grid-row-gap: 10px;
+    grid-column-gap: 10px;
+    font-size: 20px;
+    margin: 0 auto;
+}
+
+    #explanation div{
+        text-align: justify;
+    }
+
+    #explanation .title{
+        font-weight: bold;
+        grid-column: 1;
+    }
+
+    #explanation .description{
+        grid-column: 2;
+    }
+
+    #explanation span{
+        font-size: 12px;
+        font-style: italic;
+        color: #777777;
+    }
+
+#equation_editor {
+    width: 400px;
+    height: 40px;
+    font-size: 32px;
+    padding: 4px;
+    box-sizing: border-box;
+    margin: 30px auto;
+}
+
+#history {
+    width: 800px;
+    min-height: 50px;
+    background-color: #cccccc;
+    border-radius: 10px;
+    margin: 0 auto;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 23px 40px auto 23px;
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+}
+
+#phantom{
+    position: absolute;
+    width: 800px;
+    padding: 10px 20px;
+    display: grid;
+    grid-template-columns: 23px 40px auto 23px;
+    grid-column-gap: 10px;
+    background-color: rgba(204,204,204,0.3);
+}
+
+    #history .equation, #phantom .equation{
+        height: 23px;
+        font-size: 20px;
+        grid-column: 3;
+    }
+
+    #history .counter, #phantom .counter{
+        height: 23px;
+        font-size: 20px;
+        font-weight: bold;
+        grid-column: 2;
+    }
+
+    .phantom .equation, #phantom .counter{
+        color: #0000004d
+    }
+
+    .mover{
+        height: 23px;
+        font-size: 23px;
+        grid-column: 1;
+        cursor: pointer;
+        position: relative;
+    }
+
+    #history .mover{
+        color: #ffffff;
+    }
+
+    #phantom .mover{
+        color: #ffffff4d;
+    }
+
+    #history .deleter, #phantom .deleter{
+        height: 23px;
+        font-size: 23px;
+        grid-column: 4;
+        cursor: pointer;
+        color: #cc0000;
+        line-height: 0;
+    }
+
+    .phantom .deleter{
+        color: #cc00004d
+    }
+
+    #history .line {
+        grid-column-start: 1;
+        grid-column-end: 4;
+        background-color: #01d801;
+        height: 5px;
+        border-radius: 2px;
+        color: #01d801;
+    }
+
+#correction {
+    display: grid;
+    grid-template-columns: 40px auto;
+    margin: 0 auto;
+    grid-row-gap: 10px;
+    grid-column-gap: 10px;
+    width: 800px;
+}
+
+    .correction-title {
+        font-size: 20px;
+        font-weight: bold;
+        grid-column-start: 1;
+        grid-column-end: 3;
+        grid-row: 1;
+        text-align: center;
+    }
+    .correcto{
+        font-size: 20px;
+        grid-column-start: 1;
+        grid-column-end: 3;
+        grid-row: 2;
+        text-align: center;
+    }
+
+    #correction .counter{
+        width: 40px;
+        height: 40px;
+        color: white;
+        border-radius: 20px;
+        background: #7CB9E8;
+        grid-column: 1;
+        grid-row: 2;
+    }
+
+        #correction .counter p {
+            font-size: 20px;
+            margin: 4px 0 0 0;
+            text-align: center;
+            font-weight: bold;
+        }
+    
+    #correction .equation {
+        font-size: 20px;
+        color: #aa0000;
+        grid-column: 2;
+        grid-row: 2;
+    }

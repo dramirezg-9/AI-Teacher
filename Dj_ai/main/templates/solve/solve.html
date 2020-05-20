@@ -1,0 +1,57 @@
+
+{% extends 'base/base.html' %}
+{% load static %}
+{% block title %} AI-Teacher {% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/solve.css' %}">
+{% endblock%}
+{% block content %}
+<main>
+    <div id="explanation">
+        Lista de comandos:
+        <div class='title'>
+            Enunciado
+        </div>
+        <div class='description'>
+            E: <span>ecuación</span>
+        </div>
+        <div class='title'>
+            L (o cualquier letra diferente a E):
+        </div>
+        <div class='description'>
+            E: <span>ecuación</span>
+        </div>
+        <div class='title'>
+            Sumar 2 ecuaciones
+        </div>
+        <div class='description'>
+            con E1 E2
+        </div>
+        <div class='title'>
+            Reemplazar término: 
+        </div>
+        <div class='description'>
+            con E1 apl E2 <span>(En E2, el término de la izquierda es reemplazado por el de la derecha)</span>
+        </div>
+    </div>
+    <input id = "equation_editor">
+    <div id = "error_msg"></div>
+    <button type="button" class = "btn btn-primary" id="add-btn" style="width: 200px; margin: 0 auto">Añadir</button>
+    <button type="button" class = "btn btn-primary" id="history-btn" style="width: 200px;
+    margin: 30px auto 10px auto"><i class="fas fa-bars"></i> Historial  </button>
+
+    <div id = "history"></div>
+
+    <button type="button" class= "btn btn-primary" id="submit-btn" style="width: 200px; margin: 20px auto">Evaluar</button>
+
+    <div id="correction"></div>
+</main>
+{% endblock %}
+{% block scripts %}
+<script
+  src="https://code.jquery.com/jquery-3.5.1.js"
+  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+  crossorigin="anonymous"></script>
+<script src="{% static 'jquery-plugins/jquery-cookie.js' %}"></script>
+<script src="{% static 'js/solve.js' %}"></script>
+{% endblock %}
