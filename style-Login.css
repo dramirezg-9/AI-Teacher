@@ -1,0 +1,175 @@
+@import url("https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,900");
+*
+
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+
+}
+
+body
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #f3f3f3;
+    overflow: hidden;
+}
+
+.container
+{
+    position: relative;
+    width: 1050px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+
+}
+
+
+.container .recuadros
+{
+    position: relative;
+    width: 320px;
+    height: 400px;
+    background: #fff;
+    transition: 0.5s;
+
+    box-shadow: 0px 4px 4px rgba(180,180,180);
+}
+
+
+
+.container .recuadros:hover
+{
+    transform: translateY(-40px);
+
+}
+
+.container .recuadros .imagen_recuadro1
+{
+    position: relative;
+    width: 320px;
+    height: 200px;
+    background: #86EBCD;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.container .recuadros .imagen_recuadro1 img
+{
+    max-width: 160px;
+}
+
+.container .recuadros .imagen_recuadro1 h3
+{
+    position: relative;
+    color: #fff;
+    margin-top: 10px;
+
+}
+
+
+
+.container .recuadros .imagen_recuadro2
+{
+    position: relative;
+    width: 320px;
+    height: 200px;
+    background: #BF86EB;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.container .recuadros .imagen_recuadro2 img
+{
+    max-width: 160px;
+}
+
+.container .recuadros .imagen_recuadro2 h3
+{
+    position: relative;
+    color: #fff;
+    margin-top: 10px;
+
+}
+
+
+.container .recuadros .informacion
+{
+    position: relative;
+    width: 100%;
+    height: 200px;
+    padding: 20px;
+    color: #777;
+    text-align: center;
+
+}
+
+.container .recuadros .boton-profesor
+{
+    position: relative;
+    display: inline-block;
+    border: 2px solid #86EBCD;
+    padding: 20px 60px;
+    color:#fff;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-decoration-line: none;
+    background: #86EBCD;
+    transition: background 0.5s;
+    margin-top: 30px;
+    margin-left: 50px;
+}
+
+.container .recuadros .boton-profesor.redondo
+{
+    border-radius: 30px;
+}
+
+
+.container .recuadros .boton-profesor:hover
+{
+    color: #86EBCD;
+    background-color: transparent;
+}
+
+
+
+.container .recuadros .boton-estudiante
+{
+    position: relative;
+    display: inline-block;
+    border: 2px solid #BF86EB;
+    padding: 20px 60px;
+    color:#fff;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-decoration-line: none;
+    background: #BF86EB;
+    transition: background 0.5s;
+    margin-top: 30px;
+    margin-left: 65px;
+}
+
+.container .recuadros .boton-estudiante.redondo
+{
+    border-radius: 30px;
+}
+
+
+.container .recuadros .boton-estudiante:hover
+{
+    color: #BF86EB;
+    background-color: transparent;
+}
+
+
